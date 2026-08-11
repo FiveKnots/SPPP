@@ -45,7 +45,7 @@ let state = {
 };
 
 // Hardcode URL Apps Script Anda di sini
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDn2_ZiN8kw61unXXsshkrF3DM1e3NrAFAmjisPDVt3YFGkbpPIDxsHFObid4uy-Ft9w/exec"; 
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLi1rDa4bcVAgFcYsUt4JQRUO-BesjwHhs-pWzWIo0nFNmhgbM_Kzyu6Cx2AGiRWGnXQ/exec"; 
 
 /**
  * Generates a SHA-256 hash from a username and password combination.
