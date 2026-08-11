@@ -172,23 +172,24 @@
 <div class="modal-overlay" id="modalSettings" hidden>
   <div class="modal">
     <div class="modal-head">
-      <h3>Pengaturan Koneksi</h3>
+      <h3>Pengaturan Koneksi (Login)</h3>
       <button class="modal-close" data-close>&times;</button>
     </div>
     <div class="modal-body">
       <label class="field">
-        <span>URL Web App (Google Apps Script)</span>
-        <input type="text" id="cfgUrl" class="input" placeholder="https://script.google.com/macros/s/xxxx/exec">
+        <span>Username</span>
+        <input type="text" id="inputUsername" class="input" placeholder="Masukkan username">
       </label>
       <label class="field">
-        <span>Token Rahasia</span>
-        <input type="text" id="cfgToken" class="input" placeholder="KunciRahasiaKantor123!">
+        <span>Password</span>
+        <!-- type="password" hides the text visually -->
+        <input type="password" id="inputPassword" class="input" placeholder="Masukkan password">
       </label>
-      <p class="field-hint">Disimpan hanya di browser ini (localStorage), tidak dikirim kemana-mana selain ke Web App Anda sendiri.</p>
+      <p class="field-hint">Kredensial disimpan secara aman di browser ini (localStorage) dalam bentuk enkripsi (hash).</p>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" data-close>Batal</button>
-      <button class="btn btn-primary" id="btnSaveSettings">Simpan &amp; Muat Data</button>
+      <button class="btn btn-primary" id="btnSaveSettings">Login &amp; Muat Data</button>
     </div>
   </div>
 </div>
