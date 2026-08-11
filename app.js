@@ -44,6 +44,21 @@ let state = {
   pendingActionStatus: null
 };
 
+// Hardcode URL Apps Script Anda di sini
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDn2_ZiN8kw61unXXsshkrF3DM1e3NrAFAmjisPDVt3YFGkbpPIDxsHFObid4uy-Ft9w/exec"; 
+
+/**
+ * Generates a SHA-256 hash from a username and password combination.
+ */
+async function generateHashToken(username, password) {
+    const dataString = username.toLowerCase().trim() + ":" + password;
+    const encoder = new TextEncoder();
+    const dataBytes = encoder.encode(dataString);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBytes);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 /* ------------------------------------------------------- */
 /* Config (localStorage)                                    */
 /* ------------------------------------------------------- */
@@ -535,23 +550,44 @@ document.addEventListener('click', (e) => {
 });
 
 /* ------------------------------------------------------- */
-/* Settings modal                                             */
+/* Settings modal (Login)                                  */
 /* ------------------------------------------------------- */
 document.getElementById('btnSettings').addEventListener('click', () => {
-  document.getElementById('cfgUrl').value = state.config.url;
-  document.getElementById('cfgToken').value = state.config.token;
+  // Clear the inputs every time the modal opens for security
+  document.getElementById('inputUsername').value = '';
+  document.getElementById('inputPassword').value = '';
   openModal('modalSettings');
 });
+
 document.getElementById('btnSaveSettings').addEventListener('click', async () => {
-  const url = document.getElementById('cfgUrl').value.trim();
-  const token = document.getElementById('cfgToken').value.trim();
-  if (!url || !token) {
-    showToast('URL dan Token wajib diisi.', 'error');
+  const username = document.getElementById('inputUsername').value.trim();
+  const password = document.getElementById('inputPassword').value;
+  
+  if (!username || !password) {
+    showToast('Username dan Password wajib diisi.', 'error');
     return;
   }
-  saveConfig(url, token);
-  closeModal('modalSettings');
-  await refreshData();
+
+  const submitBtn = document.getElementById('btnSaveSettings');
+  submitBtn.innerText = "Memverifikasi...";
+  submitBtn.disabled = true;
+
+  try {
+    // Generate the secure hash token
+    const hashedToken = await generateHashToken(username, password);
+    
+    // Save the hardcoded URL and the generated hash
+    saveConfig(APPS_SCRIPT_URL, hashedToken);
+    
+    closeModal('modalSettings');
+    await refreshData();
+    
+  } catch (err) {
+    showToast('Terjadi kesalahan saat memproses login.', 'error');
+  } finally {
+    submitBtn.innerText = "Login & Muat Data";
+    submitBtn.disabled = false;
+  }
 });
 
 /* ------------------------------------------------------- */
