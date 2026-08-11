@@ -600,6 +600,28 @@ function linkify(text) {
     .join(' · ');
 }
 
+/**
+ * Generates a SHA-256 hash from a username and password combination.
+ */
+async function generateHashToken(username, password) {
+    // 1. Combine and standardize the inputs (lowercase username to prevent case-sensitivity issues)
+    const dataString = username.toLowerCase().trim() + ":" + password;
+    
+    // 2. Encode the string into a byte array
+    const encoder = new TextEncoder();
+    const dataBytes = encoder.encode(dataString);
+    
+    // 3. Generate the SHA-256 hash using the Web Crypto API
+    const hashBuffer = await crypto.subtle.digest('SHA-256', dataBytes);
+    
+    // 4. Convert the ArrayBuffer to a readable Hex string
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    
+    return hashHex;
+}
+
+
 /* ------------------------------------------------------- */
 /* Init                                                       */
 /* ------------------------------------------------------- */
